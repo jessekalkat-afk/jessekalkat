@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jesse Kalkat — Founding GTM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0d0d0b;
+    --surface: #141412;
+    --border: #2a2a26;
+    --gold: #c9a84c;
+    --gold-dim: #7a6330;
+    --cream: #f0ead8;
+    --muted: #6b6860;
+    --white: #faf9f5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, var(--bg) 40%, transparent);
+  }
+
+  .nav-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--cream); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 3rem 5rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 12vw, 11rem);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero-headline .accent { color: var(--gold); }
+
+  .hero-sub {
+    max-width: 560px;
+    font-size: 1.15rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-sub strong { color: var(--cream); font-weight: 400; }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    display: inline-block;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--cream); transform: translateY(-2px); }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .btn-ghost:hover { color: var(--cream); border-color: var(--cream); }
+
+  /* NUMBERS TICKER BAR */
+  .ticker-bar {
+    background: var(--gold);
+    padding: 0.9rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+
+  .ticker-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bg);
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .ticker-item::after {
+    content: '·';
+    color: var(--gold-dim);
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* SECTION WRAPPER */
+  section { position: relative; z-index: 1; }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 7rem 3rem;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold-dim);
+  }
+
+  /* STATS GRID */
+  .stats-section { border-bottom: 1px solid var(--border); }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .stat-card {
+    padding: 3rem 2.5rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+    cursor: default;
+  }
+
+  .stat-card:nth-child(3n) { border-right: none; }
+  .stat-card:nth-last-child(-n+3) { border-bottom: none; }
+
+  .stat-card:hover { background: var(--surface); }
+
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1;
+    color: var(--white);
+    letter-spacing: 0.02em;
+    margin-bottom: 0.75rem;
+    transition: color 0.3s;
+  }
+
+  .stat-card:hover .stat-number { color: var(--gold); }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .stat-label strong {
+    display: block;
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+  }
+
+  /* ABOUT / PITCH */
+  .pitch-section { border-bottom: 1px solid var(--border); }
+
+  .pitch-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .pitch-sticky {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .pitch-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 5.5vw, 5rem);
+    line-height: 0.95;
+    color: var(--white);
+    letter-spacing: 0.01em;
+    margin-bottom: 2rem;
+  }
+
+  .pitch-big .gold { color: var(--gold); }
+
+  .pitch-body p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    line-height: 1.9;
+  }
+
+  .pitch-body p strong { color: var(--cream); font-weight: 400; font-style: italic; }
+
+  .pull-quote {
+    border-left: 2px solid var(--gold);
+    padding-left: 1.5rem;
+    margin: 2.5rem 0;
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.7;
+  }
+
+  /* CAREER TIMELINE */
+  .career-section { border-bottom: 1px solid var(--border); }
+
+  .career-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 3rem;
+    padding: 3rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+
+  .career-item:last-child { border-bottom: none; }
+
+  .career-meta {
+    padding-top: 0.25rem;
+  }
+
+  .career-company {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .career-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  .career-role {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    font-weight: 300;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .career-highlights {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .career-highlights li {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding-left: 1.2rem;
+    position: relative;
+    line-height: 1.8;
+  }
+
+  .career-highlights li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--gold-dim);
+  }
+
+  .career-highlights li strong { color: var(--cream); font-weight: 400; }
+
+  /* WHAT YOU GET */
+  .value-section { border-bottom: 1px solid var(--border); }
+
+  .value-header {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 0.95;
+    color: var(--white);
+    margin-bottom: 4rem;
+    max-width: 700px;
+  }
+
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .value-card {
+    background: var(--bg);
+    padding: 2.5rem;
+    transition: background 0.3s;
+  }
+
+  .value-card:hover { background: var(--surface); }
+
+  .value-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .value-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    color: var(--white);
+    font-weight: 300;
+    margin-bottom: 0.75rem;
+  }
+
+  .value-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--surface);
+  }
+
+  .contact-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 7rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .contact-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 7vw, 6.5rem);
+    line-height: 0.92;
+    color: var(--white);
+  }
+
+  .contact-headline .gold { color: var(--gold); }
+
+  .contact-details { display: flex; flex-direction: column; gap: 1rem; }
+
+  .contact-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-row-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .contact-row-value {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    color: var(--cream);
+  }
+
+  .contact-row-value a {
+    color: var(--cream);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .contact-row-value a:hover { color: var(--gold); border-color: var(--gold); }
+
+  .availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 0.6rem 1rem;
+    margin-top: 2rem;
+  }
+
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* DECORATIVE LINES */
+  .hero-corner {
+    position: absolute;
+    top: 6rem;
+    right: 3rem;
+    text-align: right;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1s;
+  }
+
+  .hero-corner-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-corner-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    .hero-headline { font-size: clamp(3.5rem, 14vw, 6rem); }
+    .section-inner { padding: 5rem 1.5rem; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat-card:nth-child(3n) { border-right: 1px solid var(--border); }
+    .stat-card:nth-child(2n) { border-right: none; }
+    .pitch-layout { grid-template-columns: 1fr; gap: 3rem; }
+    .pitch-sticky { position: static; }
+    .career-item { grid-template-columns: 1fr; gap: 1rem; }
+    .value-grid { grid-template-columns: 1fr; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-name">Jesse Kalkat</span>
+  <ul class="nav-links">
+    <li><a href="#numbers">Numbers</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#career">Career</a></li>
+    <li><a href="#value">What you get</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-corner">
+    <div class="hero-corner-label">Available</div>
+    <div class="hero-corner-value">Q4 2026</div>
+  </div>
+
+  <div class="hero-tag">Founding GTM · Series A · Enterprise AI</div>
+
+  <h1 class="hero-headline">
+    I build<br>
+    territories<br>
+    from <span class="accent">zero.</span>
+  </h1>
+
+  <p class="hero-sub">
+    <strong>#1 AE in North America, Google Cloud, 2025.</strong> Before that, #1 in Canada at Fortinet — two years running. Every territory I've inherited was broken or blank. None of them stayed that way.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">Get in touch</a>
+    <a href="https://linkedin.com/in/jkalkat" target="_blank" class="btn-ghost">linkedin.com/in/jkalkat →</a>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-bar" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-item">1,473% Blended Attainment — 2025</div>
+    <div class="ticker-item">$300M Deal — F100, Google Cloud</div>
+    <div class="ticker-item">#1 AE North America — Google Cloud 2025</div>
+    <div class="ticker-item">1,312% AI Attainment</div>
+    <div class="ticker-item">343% Attainment — 2024</div>
+    <div class="ticker-item">President's Club — Fortinet</div>
+    <div class="ticker-item">10 Consecutive Quarters — Zero Misses</div>
+    <div class="ticker-item">195% Territory Growth — Year One</div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item">1,473% Blended Attainment — 2025</div>
+    <div class="ticker-item">$300M Deal — F100, Google Cloud</div>
+    <div class="ticker-item">#1 AE North America — Google Cloud 2025</div>
+    <div class="ticker-item">1,312% AI Attainment</div>
+    <div class="ticker-item">343% Attainment — 2024</div>
+    <div class="ticker-item">President's Club — Fortinet</div>
+    <div class="ticker-item">10 Consecutive Quarters — Zero Misses</div>
+    <div class="ticker-item">195% Territory Growth — Year One</div>
+  </div>
+</div>
+
+<!-- NUMBERS -->
+<section class="stats-section" id="numbers">
+  <div class="section-inner" style="padding-top: 4rem; padding-bottom: 0;">
+    <div class="section-label">The numbers</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card reveal">
+      <div class="stat-number">1,473%</div>
+      <div class="stat-label">
+        <strong>Blended Attainment, 2025</strong>
+        Top Growth Rep in North America · Google Cloud
+      </div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number">$300M</div>
+      <div class="stat-label">
+        <strong>Single Commit Deal, 2023</strong>
+        F100 cross-border deal · Alphabet Legal + DeepMind
+      </div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number">40×</div>
+      <div class="stat-label">
+        <strong>YoY AI Growth, 2025</strong>
+        1,312% of Cloud AI target · Full OpenAI & AWS takeouts
+      </div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number">343%</div>
+      <div class="stat-label">
+        <strong>Blended Attainment, 2024</strong>
+        310% AI attainment · 247% AI YoY growth
+      </div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number">10/10</div>
+      <div class="stat-label">
+        <strong>Quarters Hit — Fortinet</strong>
+        Only rep in North America to over-achieve every single quarter
+      </div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-number">195%</div>
+      <div class="stat-label">
+        <strong>Territory Growth, Year One — Fortinet</strong>
+        Doubled revenue again in year two · Zero inherited pipeline
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY / PITCH -->
+<section class="pitch-section" id="story">
+  <div class="section-inner">
+    <div class="pitch-layout">
+      <div class="pitch-sticky">
+        <div class="section-label">Who I am</div>
+        <div class="pitch-big">
+          Not<br>your<br>typical<br><span class="gold">hire.</span>
+        </div>
+      </div>
+      <div class="pitch-body reveal">
+        <p>
+          Most enterprise AEs come in with a book of contacts they've worked with for a decade. I don't. <strong>I build the network that matters, faster than people who think they already have one.</strong>
+        </p>
+        <p>
+          At Fortinet, I inherited a stagnant territory in an AWS/Azure market where GCP had less than 5% presence. At Google, same story — Western Canada, greenfield, and completely contested. In both cases, within a year, my territory was one of the best-performing in the country.
+        </p>
+        <div class="pull-quote">
+          "Every role I've taken, I walked into a broken or nonexistent territory and made it one of the best in the country."
+        </div>
+        <p>
+          I close <strong>7–9 figure, multi-stakeholder deals</strong> with CISOs, CIOs, CTOs, and VPs of Engineering — the buyers who matter most for AI infrastructure and cloud platforms. My methodology is MEDDIC/MEDDPICC, but my edge is simpler: I earn trust at speed, and I <em>finish</em>.
+        </p>
+        <p>
+          Now I'm looking for a Series A company with genuine upside — a founding or early AE role where the territory is blank, the category is being defined, and winning means everything. <strong>That's exactly the environment I'm built for.</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAREER -->
+<section class="career-section" id="career">
+  <div class="section-inner">
+    <div class="section-label">Career arc</div>
+
+    <div class="career-item reveal">
+      <div class="career-meta">
+        <div class="career-company">Google Cloud</div>
+        <div class="career-date">2023 – Present · SF + Vancouver</div>
+      </div>
+      <div class="career-content">
+        <div class="career-role">Field Sales Account Manager — Startups & Enterprise</div>
+        <ul class="career-highlights">
+          <li><strong>2025:</strong> 1,473% blended attainment · #1 Growth Rep, North America · Outstanding Impact</li>
+          <li>1,312% of Cloud AI target · 40× YoY AI growth · Closed 2 largest Infra AI deals in the cluster</li>
+          <li>Multiple $XM–$XXM multi-year commits · Full takeouts of OpenAI and AWS in-account</li>
+          <li><strong>2024:</strong> 343% blended attainment · 310% AI attainment · Outstanding Impact</li>
+          <li>Commercial architect on landmark $300M+ cross-border commit · Coordinated Alphabet Legal, DeepMind, F100 procurement</li>
+          <li>Organized GCP Healthcare AI Summit (200 registrants, $XM+ pipeline) + Vancouver Founders Day (700+ founders)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="career-item reveal">
+      <div class="career-meta">
+        <div class="career-company">Fortinet</div>
+        <div class="career-date">2018 – 2023 · Vancouver</div>
+      </div>
+      <div class="career-content">
+        <div class="career-role">Named Account Manager → Channel Account Manager</div>
+        <ul class="career-highlights">
+          <li>President's Club · <strong>#1 Rep in Canada</strong> · Only North American rep to hit quota every single quarter (10/10)</li>
+          <li>Grew territory 195% in year one · Doubled revenue again in year two · Zero inherited relationships</li>
+          <li>Closed <strong>largest Switching & Wireless deal in Fortinet's global history</strong> — AI datacenter, multi-geography</li>
+          <li>Reduced average sales cycle on 6-figure deals by 42% via cross-functional deal process design</li>
+          <li>Built Western Canada's partner program from near-zero · Partner attach rate: 34% → 63% in under 2 years</li>
+          <li>Formalized Fortinet's first co-sell frameworks with Microsoft and AWS — adopted nationally</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="career-item reveal">
+      <div class="career-meta">
+        <div class="career-company">Earlier</div>
+        <div class="career-date">2014 – 2018</div>
+      </div>
+      <div class="career-content">
+        <div class="career-role">IBM · Microsoft · EDP Software</div>
+        <ul class="career-highlights">
+          <li>IBM: 2017 Innovation & Delivery Excellence Award · Led cloud-native build for top-10 North American retailer</li>
+          <li>Microsoft: Supported Canada Senior Leadership on FY2016 Cloud & Security GTM · 1,600+ leads, $170M pipeline</li>
+          <li>EDP: Promoted from SE to AE in 6 months · Exceeded quota every quarter in both roles</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE PROP -->
+<section class="value-section" id="value">
+  <div class="section-inner">
+    <div class="section-label">What you're getting</div>
+    <div class="value-header reveal">
+      DAY ONE.<br>
+      NOT YEAR TWO.
+    </div>
+    <div class="value-grid">
+      <div class="value-card reveal">
+        <div class="value-icon">⚡</div>
+        <div class="value-title">Territory Build from Zero</div>
+        <div class="value-desc">
+          I've done it three times across two companies. I don't need an inherited book — I build the one that closes. Greenfield is my native environment.
+        </div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🎯</div>
+        <div class="value-title">Enterprise Deal Velocity</div>
+        <div class="value-desc">
+          MEDDIC/MEDDPICC. 7–9 figure ACV. Multi-stakeholder technical and executive buying committees. I know how enterprise procurement works — and how to move it faster.
+        </div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">🤝</div>
+        <div class="value-title">Cloud & AI Co-sell Motion</div>
+        <div class="value-desc">
+          Deep AWS and GCP co-sell experience. Built the frameworks. Closed the deals. The cloud hyperscaler channel is my fastest path to qualified pipeline at a startup.
+        </div>
+      </div>
+      <div class="value-card reveal">
+        <div class="value-icon">📐</div>
+        <div class="value-title">Process Architecture</div>
+        <div class="value-desc">
+          I don't just close — I build the playbook. At Fortinet, I designed a cross-functional deal process that cut sales cycles by 42%. I'll do the same for the next company I join.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <div class="contact-headline">
+        LET'S<br>
+        TALK<br>
+        <span class="gold">EARLY.</span>
+      </div>
+      <div class="availability-badge">
+        <div class="badge-dot"></div>
+        Targeting Q4 2026 start
+      </div>
+    </div>
+    <div class="contact-details reveal">
+      <div class="contact-row">
+        <div class="contact-row-label">Email</div>
+        <div class="contact-row-value">
+          <a href="mailto:jessekalkat@gmail.com">jessekalkat@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-label">Phone</div>
+        <div class="contact-row-value">
+          <a href="tel:+16502151380">(650) 215-1380</a>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-label">LinkedIn</div>
+        <div class="contact-row-value">
+          <a href="https://linkedin.com/in/jkalkat" target="_blank">linkedin.com/in/jkalkat</a>
+        </div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-label">Location</div>
+        <div class="contact-row-value">San Francisco Bay Area</div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-label">Visa</div>
+        <div class="contact-row-value">L-1A · I-140 Approved · EB-1C Pending</div>
+      </div>
+      <div class="contact-row">
+        <div class="contact-row-label">Education</div>
+        <div class="contact-row-value">BCom, UBC Sauder School of Business</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Jesse Kalkat — Founding GTM</span>
+  <span>San Francisco · jessekalkat@gmail.com</span>
+</footer>
+
+<script>
+  // Intersection observer for reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        // Stagger children if multiple in same parent
+        const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+        let delay = 0;
+        siblings.forEach((sib, idx) => {
+          if (sib === entry.target) delay = idx * 80;
+        });
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--cream)' : '';
+    });
+  });
+
+  // Animated number counters on scroll
+  function animateCounter(el, target, suffix = '') {
+    const duration = 1800;
+    const start = performance.now();
+    const isFloat = target % 1 !== 0;
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const val = target * ease;
+      el.textContent = (isFloat ? val.toFixed(0) : Math.floor(val)).toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  }
+</script>
+
+</body>
+</html>

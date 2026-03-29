@@ -467,9 +467,9 @@
   .career-highlights li strong { color: var(--ice); font-weight: 400; }
 
   /* VALUE */
-  .value-section { border-bottom: 1px solid var(--border); }
+.value-section { border-bottom: 1px solid var(--border); }
 
-  .value-header {
+.value-header {
     font-family: 'Fraunces', serif;
     font-size: clamp(2.5rem, 4.5vw, 4rem);
     font-weight: 800;
@@ -480,18 +480,23 @@
     max-width: 600px;
   }
 
-  .value-grid {
+.value-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2px;
-    background: var(--border);
   }
 
-  .value-card {
+.value-card {
     background: var(--bg);
     padding: 2.5rem;
     transition: background 0.3s;
+    /* Added consistent borders */
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
+  
+  .value-card:nth-child(2n) { border-right: none; }
+  .value-card:nth-last-child(-n+2) { border-bottom: none; }
+  
   .value-card:hover { background: var(--surface); }
 
   .value-icon { font-size: 1.4rem; margin-bottom: 1.2rem; }
@@ -638,6 +643,13 @@
     .pitch-sticky { position: static; }
     .career-item { grid-template-columns: 1fr; gap: 1rem; }
     .value-grid { grid-template-columns: 1fr; }
+    .value-card {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+    .value-card:last-child {
+      border-bottom: none;
+    }
     .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
     .employers-section { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
     .employers-logos { gap: 2rem; flex-wrap: wrap; }
@@ -911,7 +923,7 @@
     <div class="value-header reveal">
       What I<br>
       bring to<br>
-      my team.
+      <span class="cyan">my team</span
     </div>
     <div class="value-grid">
       <div class="value-card reveal">

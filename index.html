@@ -7,7 +7,7 @@
 <title>Jesse Kalkat — Founding GTM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@300;400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Fraunces:opsz,wght@9..144,800&family=IBM+Plex+Mono:wght@300;400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -57,8 +57,8 @@
 
   .nav-name {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
     color: var(--cyan);
     text-transform: uppercase;
   }
@@ -102,7 +102,7 @@
   }
 
   .hero-headline {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Fraunces', serif;
     font-size: clamp(4.5rem, 9vw, 9rem);
     font-weight: 800;
     line-height: 0.9;
@@ -175,8 +175,8 @@
 
   .headshot-wrap {
     position: relative;
-    width: 360px;
-    height: 440px;
+    width: 100%;
+    height: 520px;
   }
 
   .headshot-wrap::before {
@@ -520,13 +520,13 @@
     margin: 0 auto;
     padding: 7rem 3rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: center;
+    grid-template-columns: 1fr minmax(0, 1fr);
+    gap: 4rem;
+    align-items: start;
   }
 
   .contact-headline {
-    font-family: 'Syne', sans-serif;
+    font-family: 'Fraunces', serif;
     font-size: clamp(3.5rem, 6.5vw, 6rem);
     font-weight: 800;
     line-height: 0.92;
@@ -573,6 +573,9 @@
     font-family: 'Libre Baskerville', serif;
     font-size: 0.95rem;
     color: var(--ice);
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
   }
   .contact-row-value a {
     color: var(--ice);
@@ -622,13 +625,14 @@
   }
   .reveal.visible { opacity: 1; transform: none; }
 
-  /* Mobile */
+  /* Tablet */
   @media (max-width: 900px) {
     nav { padding: 1.2rem 1.5rem; }
     .nav-links { display: none; }
-    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; }
-    .hero-right { display: none; }
-    .section-inner { padding: 5rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; gap: 2rem; }
+    .hero-right { display: flex; align-items: flex-start; justify-content: flex-start; order: -1; }
+    .headshot-wrap { width: 140px; height: 170px; }
+    .section-inner { padding: 4rem 1.5rem; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .pitch-layout { grid-template-columns: 1fr; gap: 3rem; }
     .pitch-sticky { position: static; }
@@ -636,7 +640,66 @@
     .value-grid { grid-template-columns: 1fr; }
     .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
     .employers-section { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .employers-logos { gap: 2rem; flex-wrap: wrap; }
     footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-name { font-size: 0.6rem; }
+
+    .hero {
+      padding: 5.5rem 1.25rem 3rem;
+      min-height: auto;
+    }
+    .hero-right { display: flex; align-items: flex-start; justify-content: flex-start; order: -1; }
+    .headshot-wrap { width: 120px; height: 148px; }
+    .availability-tag { display: none; }
+    .hero-tag { font-size: 0.58rem; letter-spacing: 0.18em; margin-bottom: 1.25rem; }
+    .hero-headline { font-size: 3.6rem; margin-bottom: 1.5rem; }
+    .hero-sub { font-size: 0.92rem; margin-bottom: 2rem; }
+    .hero-actions { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .btn-primary { padding: 0.9rem 1.75rem; font-size: 0.65rem; }
+
+    .ticker-item { font-size: 0.58rem; padding: 0 2rem; gap: 2rem; }
+
+    .employers-section { padding: 2rem 1.25rem; }
+    .employers-logos { gap: 1.5rem; }
+    .employer-logo-text { font-size: 0.9rem; }
+    .employer-logo-sub { font-size: 0.5rem; }
+
+    .section-inner { padding: 3.5rem 1.25rem; }
+    .section-label { font-size: 0.55rem; margin-bottom: 2rem; }
+
+    .stats-grid { grid-template-columns: 1fr; }
+    .stat-card {
+      padding: 2rem 1.25rem;
+      border-right: none;
+    }
+    .stat-number { font-size: 3.2rem; }
+    .stat-label { font-size: 0.6rem; }
+
+    .pitch-big { font-size: 2.8rem; }
+    .pitch-body p { font-size: 0.95rem; }
+    .pull-quote { font-size: 1rem; }
+
+    .career-item { padding: 2rem 0; gap: 0.75rem; }
+    .career-company { font-size: 0.62rem; }
+    .career-role { font-size: 1.1rem; }
+    .career-highlights li { font-size: 0.63rem; }
+
+    .value-header { font-size: 2.2rem; margin-bottom: 2.5rem; }
+    .value-card { padding: 1.75rem 1.25rem; }
+
+    .contact-inner { padding: 4rem 1.25rem; gap: 2.5rem; }
+    .contact-headline { font-size: 3rem; }
+    .contact-badge { font-size: 0.58rem; }
+    .contact-row { padding: 1rem 0; gap: 1rem; }
+    .contact-row-label { font-size: 0.55rem; width: 65px; }
+    .contact-row-value { font-size: 0.85rem; }
+
+    footer { padding: 1.5rem 1.25rem; }
   }
 </style>
 </head>
@@ -656,14 +719,14 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <div class="hero-tag">Founding GTM · Series A · Enterprise AI</div>
+    <div class="hero-tag">Founding GTM · Early Stage · Enterprise AI</div>
     <h1 class="hero-headline">
-      I build<br>
-      territories<br>
-      from <span class="accent">zero.</span>
+      Zero<br>
+      to one,<br>
+      then <span class="accent">scale.</span>
     </h1>
     <p class="hero-sub">
-      <strong>#1 AE in North America, Google Cloud, 2025.</strong> Before that, #1 in Canada at Fortinet — two years running. Every territory I've inherited was broken or blank. None of them stayed that way.
+      Google Cloud Field Sales, Startups &amp; Enterprise. Previously Fortinet, IBM, Microsoft and GTM at a Startup. A decade closing complex deals and building the channel partnerships that make new territories scale.
     </p>
     <div class="hero-actions">
       <a href="#contact" class="btn-primary">Get in touch</a>
@@ -738,7 +801,7 @@
 <!-- NUMBERS -->
 <section class="stats-section" id="numbers">
   <div class="section-inner" style="padding-bottom: 0; padding-top: 4rem;">
-    <div class="section-label">The numbers</div>
+    <div class="section-label">Track record</div>
   </div>
   <div class="stats-grid">
     <div class="stat-card reveal">
@@ -747,7 +810,7 @@
     </div>
     <div class="stat-card reveal">
       <div class="stat-number">$300M</div>
-      <div class="stat-label"><strong>Single Commit Deal, 2023</strong>F100 cross-border · Alphabet Legal + DeepMind</div>
+      <div class="stat-label"><strong>Single Commit Deal, 2023</strong>F100 cross-border · Alphabet Legal</div>
     </div>
     <div class="stat-card reveal">
       <div class="stat-number">40×</div>
@@ -773,19 +836,17 @@
   <div class="section-inner">
     <div class="pitch-layout">
       <div class="pitch-sticky">
-        <div class="section-label">Who I am</div>
+        <div class="section-label">Background</div>
         <div class="pitch-big">
-          Not<br>your<br>typical<br><span class="cyan">hire.</span>
+          How I<br>approach<br>the <span class="cyan">work.</span>
         </div>
       </div>
       <div class="pitch-body reveal">
-        <p>Most enterprise AEs come in with a book of contacts they've worked with for a decade. I don't. <strong>I build the network that matters, faster than people who think they already have one.</strong></p>
-        <p>At Fortinet, I inherited a stagnant territory in an AWS/Azure market where GCP had less than 5% presence. At Google, same story — Western Canada, greenfield, completely contested. In both cases, within a year, my territory was one of the best-performing in the country.</p>
-        <div class="pull-quote">
-          "Every role I've taken, I walked into a broken or nonexistent territory and made it one of the best in the country."
-        </div>
-        <p>I close <strong>7–9 figure, multi-stakeholder deals</strong> with CISOs, CIOs, CTOs, and VPs of Engineering — the buyers who matter most for AI infrastructure and cloud platforms. My methodology is MEDDIC/MEDDPICC, but my edge is simpler: I earn trust at speed, and I <em>finish</em>.</p>
-        <p>Now I'm looking for a Series A company with genuine upside — a founding or early AE role where the territory is blank, the category is being defined, and winning means everything. <strong>That's exactly the environment I'm built for.</strong></p>
+        <p>Three things have defined how I sell. The first is curiosity. Before I think about a deal, I try to understand the problem the customer is actually trying to solve — not the surface version, but the one underneath it. That takes time and genuine interest, and it's usually where the real opportunity is.</p>
+        <p>The second is a dual focus on creative deal-making and pattern recognition. I specialise in putting together unique, non-standard deals that address specific market gaps. By applying pattern recognition to these successes, I've been able to scale motions across diverse industries, from traditional hardware to generative media. This allows me to take the lessons from a complex, "one-off" win and turn them into a scalable framework for the rest of the organisation.</p>
+        <p>The third is persistence. At Fortinet, I inherited a stagnant Western Canada territory in a market others had given up on — built the pipeline from scratch, then doubled the revenue year after year. I never missed a quarter even when starting from scratch — a consistent theme in my career is that I always find a way.</p>
+        <p>On the question of big-company background: the roles I've been in didn't come with much infrastructure. Greenfield territories, no inherited pipeline, no pre-built playbook. Closing came down to figuring it out and staying in the work. That's the environment I'm most comfortable in, and it's the one I'm looking for next.</p>
+        <p>I'm looking to join an early stage AI company, where the category is still being defined and the go-to-market is still being built. If that's the stage you're at, I'd like to talk.</p>
       </div>
     </div>
   </div>
@@ -808,7 +869,7 @@
           <li>1,312% of Cloud AI target · 40× YoY AI growth · Closed 2 largest Infra AI deals in cluster</li>
           <li>Multiple $XM–$XXM multi-year commits · Full takeouts of OpenAI and AWS in-account</li>
           <li><strong>2024:</strong> 343% blended attainment · 310% AI attainment · Outstanding Impact</li>
-          <li>Commercial architect on landmark $300M+ cross-border commit · Alphabet Legal + DeepMind + F100 procurement</li>
+          <li>Commercial architect on landmark $300M+ cross-border commit · Alphabet Legal + F100 procurement</li>
           <li>Organized GCP Healthcare AI Summit (200 registrants) + Vancouver Founders Day (700+ founders)</li>
         </ul>
       </div>
@@ -820,10 +881,10 @@
         <div class="career-date">2018 – 2023 · Vancouver</div>
       </div>
       <div>
-        <div class="career-role">Named Account Manager → Channel Account Manager</div>
+        <div class="career-role">Channel Account Manager → Named Account Manager</div>
         <ul class="career-highlights">
           <li>President's Club · <strong>#1 Rep in Canada</strong> · Only North American rep to hit quota every single quarter (10/10)</li>
-          <li>Grew territory 195% in year one · Doubled revenue again in year two · Zero inherited relationships</li>
+          <li>Grew territory 195% in year one · Doubled revenue again in year two</li>
           <li>Closed <strong>largest Switching &amp; Wireless deal in Fortinet's global history</strong> — AI datacenter, multi-geography</li>
           <li>Reduced average sales cycle on 6-figure deals by 42% via cross-functional deal process design</li>
           <li>Built Western Canada's partner program from near-zero · Partner attach rate: 34% → 63% in under 2 years</li>
@@ -837,7 +898,7 @@
         <div class="career-date">2014 – 2018</div>
       </div>
       <div>
-        <div class="career-role">IBM · Microsoft · EDP Software</div>
+        <div class="career-role">IBM · Microsoft · EDP Software (Startup GTM)</div>
         <ul class="career-highlights">
           <li>IBM: 2017 Innovation &amp; Delivery Excellence Award · Cloud-native build for top North American retailer</li>
           <li>Microsoft: Supported Canada SLT on FY2016 Cloud &amp; Security GTM · 1,600+ leads, $170M pipeline</li>
@@ -853,29 +914,31 @@
   <div class="section-inner">
     <div class="section-label">What you're getting</div>
     <div class="value-header reveal">
-      DAY ONE.<br>
-      NOT YEAR TWO.
+      What I<br>
+      bring to<br>
+      the role.
     </div>
     <div class="value-grid">
       <div class="value-card reveal">
         <div class="value-icon">⚡</div>
-        <div class="value-title">Territory Build from Zero</div>
-        <div class="value-desc">Done it three times across two companies. I don't need an inherited book — I build the one that closes. Greenfield is my native environment.</div>
+        <div class="value-title">Turning Single Wins into Scaled Motions</div>
+        <div class="value-desc">I find the pattern inside a complex one-off deal and turn it into the next playbook. That's how isolated wins become consistent pipeline.</div>
       </div>
       <div class="value-card reveal">
         <div class="value-icon">🎯</div>
-        <div class="value-title">Enterprise Deal Velocity</div>
-        <div class="value-desc">MEDDIC/MEDDPICC. 7–9 figure ACV. Multi-stakeholder technical and executive buying committees. I know how enterprise procurement works — and how to move it faster.</div>
+        <div class="value-title">Enterprise Deal Experience</div>
+        <div class="value-desc">Seven to nine figure ACV, multi-stakeholder buying committees, long cycles. Comfortable at every level of the deal from the C-suite to procurement.</div>
       </div>
       <div class="value-card reveal">
         <div class="value-icon">🤝</div>
-        <div class="value-title">Cloud &amp; AI Co-sell Motion</div>
-        <div class="value-desc">Deep AWS and GCP co-sell experience. Built the frameworks. Closed the deals. The cloud hyperscaler channel is my fastest path to qualified pipeline at a startup.</div>
+        <div class="value-title">Channel &amp; Co-sell Partnerships</div>
+        <div class="value-desc">Grew Fortinet's partner attach rate from 34% to 63% in under two years. A well-run channel is the fastest way to reach enterprise buyers at scale without proportional headcount.</div>
       </div>
+
       <div class="value-card reveal">
-        <div class="value-icon">📐</div>
-        <div class="value-title">Process Architecture</div>
-        <div class="value-desc">I don't just close — I build the playbook. At Fortinet, I designed a cross-functional deal process that cut sales cycles by 42%. I'll do the same for the next company I join.</div>
+        <div class="value-icon">💪</div>
+        <div class="value-title">Grit — Carried from Day One</div>
+        <div class="value-desc">Started in door-to-door sales. Ten consecutive quarters without a miss at Fortinet. I don't give up on a deal until I've exhausted every option.</div>
       </div>
     </div>
   </div>
@@ -886,9 +949,9 @@
   <div class="contact-inner">
     <div class="reveal">
       <div class="contact-headline">
-        LET'S<br>
-        TALK<br>
-        <span class="cyan">EARLY.</span>
+        Open to<br>
+        the right<br>
+        <span class="cyan">conversation.</span>
       </div>
       <div class="contact-badge">
         <div class="badge-dot"></div>
